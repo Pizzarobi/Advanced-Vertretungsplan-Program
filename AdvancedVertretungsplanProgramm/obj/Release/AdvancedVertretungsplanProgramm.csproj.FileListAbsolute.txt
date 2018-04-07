@@ -1,0 +1,14 @@
+C:\Users\Win8\Desktop\Stuff 2.0\MorseCodeConverter\AdvancedVertretungsplanProgramm\AdvancedVertretungsplanProgramm\bin\Release\AdvancedVertretungsplanProgramm.exe.config
+C:\Users\Win8\Desktop\Stuff 2.0\MorseCodeConverter\AdvancedVertretungsplanProgramm\AdvancedVertretungsplanProgramm\bin\Release\AdvancedVertretungsplanProgramm.exe
+C:\Users\Win8\Desktop\Stuff 2.0\MorseCodeConverter\AdvancedVertretungsplanProgramm\AdvancedVertretungsplanProgramm\bin\Release\AdvancedVertretungsplanProgramm.pdb
+C:\Users\Win8\Desktop\Stuff 2.0\MorseCodeConverter\AdvancedVertretungsplanProgramm\AdvancedVertretungsplanProgramm\bin\Release\HtmlAgilityPack.dll
+C:\Users\Win8\Desktop\Stuff 2.0\MorseCodeConverter\AdvancedVertretungsplanProgramm\AdvancedVertretungsplanProgramm\bin\Release\Newtonsoft.Json.dll
+C:\Users\Win8\Desktop\Stuff 2.0\MorseCodeConverter\AdvancedVertretungsplanProgramm\AdvancedVertretungsplanProgramm\bin\Release\HtmlAgilityPack.pdb
+C:\Users\Win8\Desktop\Stuff 2.0\MorseCodeConverter\AdvancedVertretungsplanProgramm\AdvancedVertretungsplanProgramm\bin\Release\HtmlAgilityPack.xml
+C:\Users\Win8\Desktop\Stuff 2.0\MorseCodeConverter\AdvancedVertretungsplanProgramm\AdvancedVertretungsplanProgramm\bin\Release\Newtonsoft.Json.xml
+C:\Users\Win8\Desktop\Stuff 2.0\MorseCodeConverter\AdvancedVertretungsplanProgramm\AdvancedVertretungsplanProgramm\obj\Release\AdvancedVertretungsplanProgramm.Form1.resources
+C:\Users\Win8\Desktop\Stuff 2.0\MorseCodeConverter\AdvancedVertretungsplanProgramm\AdvancedVertretungsplanProgramm\obj\Release\AdvancedVertretungsplanProgramm.Properties.Resources.resources
+C:\Users\Win8\Desktop\Stuff 2.0\MorseCodeConverter\AdvancedVertretungsplanProgramm\AdvancedVertretungsplanProgramm\obj\Release\AdvancedVertretungsplanProgramm.csproj.GenerateResource.Cache
+C:\Users\Win8\Desktop\Stuff 2.0\MorseCodeConverter\AdvancedVertretungsplanProgramm\AdvancedVertretungsplanProgramm\obj\Release\AdvancedVertretungsplanProgramm.exe
+C:\Users\Win8\Desktop\Stuff 2.0\MorseCodeConverter\AdvancedVertretungsplanProgramm\AdvancedVertretungsplanProgramm\obj\Release\AdvancedVertretungsplanProgramm.pdb
+C:\Users\Win8\Desktop\Stuff 2.0\MorseCodeConverter\AdvancedVertretungsplanProgramm\AdvancedVertretungsplanProgramm\obj\Release\AdvancedVertretungsplanProgramm.csprojResolveAssemblyReference.cache
