@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Code by Robert Kalmar 2017-2018
+// More information at avp.robert-k.net
+// Comments in German
+
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
