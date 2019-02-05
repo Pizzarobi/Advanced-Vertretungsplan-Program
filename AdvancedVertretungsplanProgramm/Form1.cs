@@ -1,5 +1,6 @@
 ﻿// Code by Robert Kalmar 2017-2018
 // More information at avp.robert-k.net
+// More information at Github @pizzarobi
 // Comments in German
 
 using System;
@@ -44,17 +45,27 @@ namespace AdvancedVertretungsplanProgramm
                 List<string> Strings = new List<string>();
 
                 HtmlWeb web = new HtmlWeb();
-                HtmlAgilityPack.HtmlDocument doc = web.Load(Website);
+                HtmlAgilityPack.HtmlDocument doc;
 
-                if (doc.DocumentNode.SelectSingleNode("//h2[@class='TextUeberschrift']") != null)
+                try
+                {
+                    doc = web.Load(Website);
+                }catch
+                {
+                    Header.Text = "Error";
+                    Mitteilungen.Text = "Keine Internetverbindung. Falls eine Internetverbindung besteht, überprüfe deine Firewall.";
+                    doc = null;
+                }
+
+                try
                 {
                     Header.Text = doc.DocumentNode.SelectSingleNode("//h2[@class='TextUeberschrift']").InnerText;
 
-                    if (doc.DocumentNode.SelectSingleNode("//table[@class='TabelleMitteilung']") != null)
+                    try
                     {
                         Mitteilungen.Text = doc.DocumentNode.SelectSingleNode("//table[@class='TabelleMitteilung']").InnerText.Remove(0, 3).ToString();
                     }
-                    else
+                    catch
                     { Mitteilungen.Text = null; }
 
                     if (doc.DocumentNode.SelectNodes("//td[@class='UngeradeZelleTabelleVertretungen']") != null)
@@ -67,7 +78,7 @@ namespace AdvancedVertretungsplanProgramm
                         GeradeZelle = doc.DocumentNode.SelectNodes("//td[@class='ZelleGeradeTabelleVertretungen']").ToList();
                     }
                 }
-                else
+                catch
                 {
                     Header.Text = "Vertretungsplan konnte nicht geladen werden.";
                 }
@@ -88,7 +99,9 @@ namespace AdvancedVertretungsplanProgramm
                         if (Strings[i].Contains(Kurse[k]))
                         {
                             dataGrid.RowCount = Rows++;
-                            dataGrid.Rows.Add(Strings[i], Strings[++i], Strings[++i], Strings[++i], Strings[++i], Strings[++i], Strings[++i], Strings[++i]);
+
+                            dataGrid.Rows.Add(Strings[i++], Strings[i++], Strings[i++], Strings[i++], Strings[i++], Strings[i++], Strings[i++], Strings[i]);
+                            
                             vertret = true;
                         }
                     }
@@ -101,7 +114,8 @@ namespace AdvancedVertretungsplanProgramm
 
                 ColumnName();
                 dataGrid.Sort(dataGrid.Columns[1], System.ComponentModel.ListSortDirection.Ascending);
-            }else {
+            }else
+            {
                 Header.Text = "Error";
                 Mitteilungen.Text = "Bitte Überprüfe deine Internetverbindung.";
             }
@@ -153,6 +167,26 @@ namespace AdvancedVertretungsplanProgramm
             dataGrid.Columns[7].Name = "Sonstiges";
         }
 
+        private void UpdateLessons()
+        {
+            int Rows = 1;
+            dataGrid.ColumnCount = 1;
+            dataGrid.RowCount = Rows;
+            dataGrid.Columns[0].Name = "Kurse";
+
+            if (AutoLoadLessons())
+            {
+                LoadJson();
+
+                for (int i = 0; i < Kurse.Count; i++)
+                {
+                    dataGrid.RowCount = Rows++;
+                    dataGrid.Rows.Add(Kurse[i]);
+                }
+            }
+
+        }
+
         /// <summary>
         /// Lädt den Vertretungsplan von morgen
         /// </summary>
@@ -187,8 +221,13 @@ namespace AdvancedVertretungsplanProgramm
         /// </summary>
         private void AddLessons()
         {
-            Kurse.Add(lessonName.Text);
-            lessonName.ResetText();
+            if(lessonName.Text!="")
+            {
+                Kurse.Add(lessonName.Text);
+                lessonName.ResetText();
+            }
+
+            SaveDataInJson();
         }
 
         /// <summary>
@@ -209,15 +248,9 @@ namespace AdvancedVertretungsplanProgramm
             }
         }
 
-        private void saveData_Click(object sender, EventArgs e)
-        {
-            SaveDataInJson();
-            MessageBox.Show("Die Kurse wurden erfolgreich in Kurse.json abgespeichert.");
-        }
-
         private void madeBy_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Programmiert von Robert Kalmar mithilfe von Microsoft Visual Studio."+ "\n" +"Und der Benutzung von Newtonsoft.Json und HtmlAgilityPack.\nEin Changelog befindet sich auf http://avp.robert-k.net","Version Beta 0.8");
+            MessageBox.Show("Programmiert von Robert Kalmar http://www.github.com/Pizzarobi mithilfe von Microsoft Visual Studio."+ "\n" + "Und der Benutzung von Newtonsoft.Json und HtmlAgilityPack.\nEin Changelog befindet sich auf https://robert-k.net/projekte/avp/changelog/ . \n", "Version Beta 0.9");
         }
 
         /// <summary>
@@ -225,21 +258,7 @@ namespace AdvancedVertretungsplanProgramm
         /// </summary>
         private void ShowLessons_Click(object sender, EventArgs e)
         {
-            int Rows = 1;
-            dataGrid.ColumnCount = 1;
-            dataGrid.RowCount = Rows;
-            dataGrid.Columns[0].Name = "Kurse";
-
-            if (AutoLoadLessons())
-            {
-                LoadJson();
-
-                for (int i = 0; i < Kurse.Count; i++)
-                {
-                    dataGrid.RowCount = Rows++;
-                    dataGrid.Rows.Add(Kurse[i]);
-                }
-            }
+            UpdateLessons();
         }
 
         /// <summary>
@@ -265,6 +284,18 @@ namespace AdvancedVertretungsplanProgramm
         {
             int desc;
             return InternetGetConnectedState(out desc, 0);
+        }
+
+        private void dataGrid_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                lessonName.Text = dataGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            }
+            catch
+            {
+                lessonName.Text = "";
+            }
         }
     }
 }

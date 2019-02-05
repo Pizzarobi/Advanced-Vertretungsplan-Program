@@ -33,7 +33,6 @@
             this.loadTableTomorrow = new System.Windows.Forms.Button();
             this.lessonName = new System.Windows.Forms.TextBox();
             this.addLesson = new System.Windows.Forms.Button();
-            this.saveData = new System.Windows.Forms.Button();
             this.LoadTableToday = new System.Windows.Forms.Button();
             this.Header = new System.Windows.Forms.Label();
             this.Mitteilungen = new System.Windows.Forms.TextBox();
@@ -53,6 +52,7 @@
             this.dataGrid.ReadOnly = true;
             this.dataGrid.Size = new System.Drawing.Size(906, 273);
             this.dataGrid.TabIndex = 0;
+            this.dataGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid_CellClick);
             // 
             // loadTableTomorrow
             // 
@@ -85,16 +85,6 @@
             this.addLesson.Text = "Kurs Hinzufügen";
             this.addLesson.UseVisualStyleBackColor = true;
             this.addLesson.Click += new System.EventHandler(this.addLesson_Click);
-            // 
-            // saveData
-            // 
-            this.saveData.Location = new System.Drawing.Point(807, 462);
-            this.saveData.Name = "saveData";
-            this.saveData.Size = new System.Drawing.Size(111, 38);
-            this.saveData.TabIndex = 4;
-            this.saveData.Text = "Kurse Abspeichern";
-            this.saveData.UseVisualStyleBackColor = true;
-            this.saveData.Click += new System.EventHandler(this.saveData_Click);
             // 
             // LoadTableToday
             // 
@@ -169,7 +159,6 @@
             this.Controls.Add(this.Mitteilungen);
             this.Controls.Add(this.Header);
             this.Controls.Add(this.LoadTableToday);
-            this.Controls.Add(this.saveData);
             this.Controls.Add(this.addLesson);
             this.Controls.Add(this.lessonName);
             this.Controls.Add(this.loadTableTomorrow);
@@ -190,7 +179,6 @@
         private System.Windows.Forms.Button loadTableTomorrow;
         private System.Windows.Forms.TextBox lessonName;
         private System.Windows.Forms.Button addLesson;
-        private System.Windows.Forms.Button saveData;
         private System.Windows.Forms.Button LoadTableToday;
         private System.Windows.Forms.Label Header;
         private System.Windows.Forms.TextBox Mitteilungen;
