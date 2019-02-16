@@ -1,7 +1,9 @@
-﻿// Code by Robert Kalmar 2017-2018
+﻿// Code by Robert Kalmar 2017-2019
 // More information at avp.robert-k.net
 // More information at Github @pizzarobi
 // Comments in German
+// Methods begin Upper Case
+// Objects / Attributes Lower Case
 
 using System;
 using System.IO;
@@ -16,6 +18,8 @@ namespace AdvancedVertretungsplanProgramm
     public partial class Form1 : Form
     {
         private List<string> Kurse = new List<string>();
+        bool vertret;
+        bool allLessons = false;
 
         public Form1()
         {
@@ -30,12 +34,15 @@ namespace AdvancedVertretungsplanProgramm
         /// Erstellt und füllt das DataGrid
         /// </summary>
         /// <param name="Website">Website von der die Dateien geholt werden sollen (morgen oder übermorgen)</param>
-        private void FillDataGrid(string Website)
+        private void FillDataGrid(string Website, bool showAll)
         {
+            //Während geladen wird, soll Warte-cursor gezeigt werden
+            Cursor.Current = Cursors.WaitCursor;
+
             if (AutoLoadLessons() && CheckNet())
             {
                 int Rows = 1;
-                bool vertret = false;
+                vertret = false;
                 dataGrid.ColumnCount = 8;
                 dataGrid.RowCount = Rows;
 
@@ -47,6 +54,7 @@ namespace AdvancedVertretungsplanProgramm
                 HtmlWeb web = new HtmlWeb();
                 HtmlAgilityPack.HtmlDocument doc;
 
+                //Versucht den Sourcecode der Website runterzuladen
                 try
                 {
                     doc = web.Load(Website);
@@ -57,6 +65,7 @@ namespace AdvancedVertretungsplanProgramm
                     doc = null;
                 }
 
+                //Versucht den Vertretungsplan und einzelne Elementa davon zu laden
                 try
                 {
                     Header.Text = doc.DocumentNode.SelectSingleNode("//h2[@class='TextUeberschrift']").InnerText;
@@ -67,7 +76,7 @@ namespace AdvancedVertretungsplanProgramm
                     }
                     catch
                     { Mitteilungen.Text = null; }
-
+                    
                     if (doc.DocumentNode.SelectNodes("//td[@class='UngeradeZelleTabelleVertretungen']") != null)
                     {
                         UngeradeZelle = doc.DocumentNode.SelectNodes("//td[@class='UngeradeZelleTabelleVertretungen']").ToList();
@@ -83,6 +92,7 @@ namespace AdvancedVertretungsplanProgramm
                     Header.Text = "Vertretungsplan konnte nicht geladen werden.";
                 }
 
+                //Fügt die Elemente der Strings Liste hinzu
                 foreach (var item in UngeradeZelle)
                 {
                     Strings.Add(item.InnerText);
@@ -92,17 +102,37 @@ namespace AdvancedVertretungsplanProgramm
                     Strings.Add(item.InnerText);
                 }
 
+                //Für alle Elemente in String wird überprüft, ob diese die Kurse aus der Liste beinhalten
                 for (int i = 0; i < Strings.Count; i++)
                 {
-                    for (int k = 0; k < Kurse.Count; k++)
+                    if(showAll)
                     {
-                        if (Strings[i].Contains(Kurse[k]))
+                        //Zeigt alle Kurse an
+                        dataGrid.RowCount = Rows++;  //Substring entfernt leerzeichen am Anfang von Kursen
+                        dataGrid.Rows.Add(Strings[i++], Strings[i++], Strings[i++], Strings[i++], Strings[i++], Strings[i++], Strings[i++], Strings[i]);
+                        
+                        vertret = true;
+                    }
+                    else
+                    {
+                        for (int k = 0; k < Kurse.Count; k++)
                         {
-                            dataGrid.RowCount = Rows++;
+                            //Strings[i].Contains(Kurse[k])
+                            if(Strings[i].Length >=2)
+                            {
+                                //Substring entfernt leerzeichen am Anfang von Kursen
+                                string Kurs = Strings[i].Substring(1);
 
-                            dataGrid.Rows.Add(Strings[i++], Strings[i++], Strings[i++], Strings[i++], Strings[i++], Strings[i++], Strings[i++], Strings[i]);
-                            
-                            vertret = true;
+                                if (Strings[i].Substring(1) == Kurse[k])
+                                {
+                                    dataGrid.RowCount = Rows++;
+
+                                    dataGrid.Rows.Add(Strings[i++].Substring(1), Strings[i++], Strings[i++], Strings[i++], Strings[i++], Strings[i++], Strings[i++], Strings[i]);
+
+                                    vertret = true;
+                                }
+                            }
+
                         }
                     }
                 }
@@ -113,12 +143,32 @@ namespace AdvancedVertretungsplanProgramm
                 }
 
                 ColumnName();
-                dataGrid.Sort(dataGrid.Columns[1], System.ComponentModel.ListSortDirection.Ascending);
+
+                if (showAll)
+                {
+                    dataGrid.Sort(dataGrid.Columns[0], System.ComponentModel.ListSortDirection.Ascending);
+                }
+                else 
+                {
+                    dataGrid.Sort(dataGrid.Columns[1], System.ComponentModel.ListSortDirection.Ascending);
+                }
+
+            }else if(!CheckNet())
+            {
+                Header.Text = "Error";
+                Mitteilungen.Text = "Bitte überprüfen Sie ihre Internetverbindung.";
+            }else if(!File.Exists(@"Kurse.json"))
+            {
+                Header.Text = "Error";
+                Mitteilungen.Text = "Fügen Sie bitte Kurse hinzu! Dies wird gemacht indem der Kursname in das Textfeld eingefügt wird, und die Taste Enter oder der Hinzufügen Knopf gedrückt wird.";
             }else
             {
                 Header.Text = "Error";
-                Mitteilungen.Text = "Bitte Überprüfe deine Internetverbindung.";
+                Mitteilungen.Text = "Diesen Fehler dürfte es normalerweise nicht geben! Bitte kontakrieren Sie den Entwickler und schicken sie ihm hiervon ein Bild. Pogchamp Out!";
             }
+
+            //Wenn Methode fertig, soll wieder normaler Cursor angezeigt werden
+            Cursor.Current = Cursors.WaitCursor;
         }
 
         /// <summary>
@@ -167,6 +217,9 @@ namespace AdvancedVertretungsplanProgramm
             dataGrid.Columns[7].Name = "Sonstiges";
         }
 
+        /// <summary>
+        /// Aktualisiert und zeigt die Kurse an
+        /// </summary>
         private void UpdateLessons()
         {
             int Rows = 1;
@@ -190,9 +243,9 @@ namespace AdvancedVertretungsplanProgramm
         /// <summary>
         /// Lädt den Vertretungsplan von morgen
         /// </summary>
-        private void loadTableTomorrow_Click(object sender, EventArgs e)
+        private void LoadTableTomorrow_Click(object sender, EventArgs e)
         {
-            FillDataGrid("http://www.hans-sachs-gymnasium.de/WocheHP/schuelerplan_morgen.htm");
+            FillDataGrid("http://www.hans-sachs-gymnasium.de/WocheHP/schuelerplan_morgen.htm", allLessons);
         }
         
         /// <summary>
@@ -200,20 +253,27 @@ namespace AdvancedVertretungsplanProgramm
         /// </summary>
         private void LoadTableToday_Click(object sender, EventArgs e)
         {
-            FillDataGrid("http://www.hans-sachs-gymnasium.de/WocheHP/schuelerplan_heute.htm");
+            FillDataGrid("http://www.hans-sachs-gymnasium.de/WocheHP/schuelerplan_heute.htm",allLessons);
         }
         
-        private void addLesson_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Falls auf addLesson geklickt wird, wird ein neuer Kurs hinzugefügt
+        /// </summary>
+        private void AddLesson_Click(object sender, EventArgs e)
         {
             AddLessons();
         }
         
-        private void lessonName_KeyDown(object sender, KeyEventArgs e)
+        /// <summary>
+        /// Wenn Enter gedrückt ist, wird ein neuer Kurs hinzugefügt
+        /// </summary>
+        private void LessonName_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 AddLessons();
             }
+
         }
 
         /// <summary>
@@ -223,11 +283,24 @@ namespace AdvancedVertretungsplanProgramm
         {
             if(lessonName.Text!="")
             {
-                Kurse.Add(lessonName.Text);
+                if (lessonName.Text.Contains("\r\n"))
+                {
+                    try
+                    {
+                        string Kurs = lessonName.Text.Substring(2);
+                        Kurse.Add(Kurs);
+                    }
+                    catch { }
+                }
+                else
+                {
+                    Kurse.Add(lessonName.Text);
+                }
                 lessonName.ResetText();
             }
 
             SaveDataInJson();
+            UpdateLessons();
         }
 
         /// <summary>
@@ -248,9 +321,12 @@ namespace AdvancedVertretungsplanProgramm
             }
         }
 
-        private void madeBy_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Zeigt eine kleine Nachricht
+        /// </summary>
+        private void MadeBy_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Programmiert von Robert Kalmar http://www.github.com/Pizzarobi mithilfe von Microsoft Visual Studio."+ "\n" + "Und der Benutzung von Newtonsoft.Json und HtmlAgilityPack.\nEin Changelog befindet sich auf https://robert-k.net/projekte/avp/changelog/ . \n", "Version Beta 0.9");
+            MessageBox.Show("Programmiert von Robert Kalmar http://www.github.com/Pizzarobi mithilfe von Microsoft Visual Studio."+ "\n" + "Und der Benutzung von Newtonsoft.Json und HtmlAgilityPack.\nIcon kreiert von Maxim Kalaschnikow\nEin Changelog befindet sich auf https://robert-k.net/projekte/avp/changelog/ . \n", "Version 1.0");
         }
 
         /// <summary>
@@ -262,9 +338,17 @@ namespace AdvancedVertretungsplanProgramm
         }
 
         /// <summary>
+        /// Führt DeleteLessons() aus
+        /// </summary>
+        private void DeleteLessons_Click(object sender, EventArgs e)
+        {
+            DeleteLessons();
+        }
+
+        /// <summary>
         /// Löscht den eingegebenen Kurs und speichert die Liste neu ab
         /// </summary>
-        private void deleteLessons_Click(object sender, EventArgs e)
+        private void DeleteLessons()
         {
             for (int i = 0; i < Kurse.Count; i++)
             {
@@ -275,18 +359,54 @@ namespace AdvancedVertretungsplanProgramm
                     SaveDataInJson();
                 }
             }
+            UpdateLessons();
         }
 
+        //Internet Connection Check
         [System.Runtime.InteropServices.DllImport("wininet.dll")]
         private extern static bool InternetGetConnectedState(out int Description, int ReservedValue);
 
+        /// <summary>
+        /// Überprüft ob der Computer mit dem Internet Verbunden
+        /// </summary>
+        /// <returns>Gibt True zurück wenn der Computer mit dem Internet verbunden ist</returns>
         public static bool CheckNet()
         {
-            int desc;
-            return InternetGetConnectedState(out desc, 0);
+            return InternetGetConnectedState(out int desc, 0);
         }
 
-        private void dataGrid_CellClick(object sender, DataGridViewCellEventArgs e)
+        /// <summary>
+        /// Wenn ein Zelle angeklickt wird, soll der Inhalt dem Textfeld hinzugefügt werden
+        /// </summary>
+        private void DataGrid_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                lessonName.ResetText();
+                lessonName.Text = dataGrid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            }
+            catch
+            {
+                lessonName.Text = "";
+            }
+        }
+
+        /// <summary>
+        /// Überprüft ob die showAll Box geklickt wurde
+        /// </summary>
+        private void ShowAll_CheckedChanged(object sender, EventArgs e)
+        {
+            if (showAll.Checked)
+            {
+                allLessons = true;
+            }
+            else
+            {
+                allLessons = false;
+            }
+        }
+
+        private void DataGrid_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
@@ -295,6 +415,14 @@ namespace AdvancedVertretungsplanProgramm
             catch
             {
                 lessonName.Text = "";
+            }
+        }
+
+        private void DataGrid_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                DeleteLessons();
             }
         }
     }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.dataGrid = new System.Windows.Forms.DataGridView();
             this.loadTableTomorrow = new System.Windows.Forms.Button();
@@ -39,6 +40,8 @@
             this.madeBy = new System.Windows.Forms.Label();
             this.ShowLessons = new System.Windows.Forms.Button();
             this.deleteLessons = new System.Windows.Forms.Button();
+            this.showAll = new System.Windows.Forms.CheckBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -52,7 +55,9 @@
             this.dataGrid.ReadOnly = true;
             this.dataGrid.Size = new System.Drawing.Size(906, 273);
             this.dataGrid.TabIndex = 0;
-            this.dataGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid_CellClick);
+            this.dataGrid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_CellClick);
+            this.dataGrid.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGrid_CellEnter);
+            this.dataGrid.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DataGrid_KeyDown);
             // 
             // loadTableTomorrow
             // 
@@ -62,7 +67,7 @@
             this.loadTableTomorrow.TabIndex = 1;
             this.loadTableTomorrow.Text = "Vertretungsplan von morgen laden";
             this.loadTableTomorrow.UseVisualStyleBackColor = true;
-            this.loadTableTomorrow.Click += new System.EventHandler(this.loadTableTomorrow_Click);
+            this.loadTableTomorrow.Click += new System.EventHandler(this.LoadTableTomorrow_Click);
             // 
             // lessonName
             // 
@@ -73,7 +78,8 @@
             this.lessonName.Size = new System.Drawing.Size(165, 38);
             this.lessonName.TabIndex = 2;
             this.lessonName.Text = "Kursname";
-            this.lessonName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lessonName_KeyDown);
+            this.toolTip1.SetToolTip(this.lessonName, "Kurskennung hier eingeben!\r\nz.B. 2d3");
+            this.lessonName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.LessonName_KeyDown);
             // 
             // addLesson
             // 
@@ -83,8 +89,9 @@
             this.addLesson.Size = new System.Drawing.Size(111, 38);
             this.addLesson.TabIndex = 3;
             this.addLesson.Text = "Kurs Hinzufügen";
+            this.toolTip1.SetToolTip(this.addLesson, "Fügt Kurs hinzu (Enter)");
             this.addLesson.UseVisualStyleBackColor = true;
-            this.addLesson.Click += new System.EventHandler(this.addLesson_Click);
+            this.addLesson.Click += new System.EventHandler(this.AddLesson_Click);
             // 
             // LoadTableToday
             // 
@@ -125,11 +132,11 @@
             this.madeBy.Size = new System.Drawing.Size(118, 13);
             this.madeBy.TabIndex = 9;
             this.madeBy.Text = "Made by Robert Kalmar";
-            this.madeBy.Click += new System.EventHandler(this.madeBy_Click);
+            this.madeBy.Click += new System.EventHandler(this.MadeBy_Click);
             // 
             // ShowLessons
             // 
-            this.ShowLessons.Location = new System.Drawing.Point(355, 479);
+            this.ShowLessons.Location = new System.Drawing.Point(418, 435);
             this.ShowLessons.Name = "ShowLessons";
             this.ShowLessons.Size = new System.Drawing.Size(111, 38);
             this.ShowLessons.TabIndex = 10;
@@ -140,19 +147,32 @@
             // deleteLessons
             // 
             this.deleteLessons.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.deleteLessons.Location = new System.Drawing.Point(301, 434);
+            this.deleteLessons.Location = new System.Drawing.Point(301, 435);
             this.deleteLessons.Name = "deleteLessons";
             this.deleteLessons.Size = new System.Drawing.Size(111, 38);
             this.deleteLessons.TabIndex = 11;
             this.deleteLessons.Text = "Kurs Entfernen";
+            this.toolTip1.SetToolTip(this.deleteLessons, "Entfernt Kurs (Entf)");
             this.deleteLessons.UseVisualStyleBackColor = true;
-            this.deleteLessons.Click += new System.EventHandler(this.deleteLessons_Click);
+            this.deleteLessons.Click += new System.EventHandler(this.DeleteLessons_Click);
+            // 
+            // showAll
+            // 
+            this.showAll.AutoSize = true;
+            this.showAll.Location = new System.Drawing.Point(355, 491);
+            this.showAll.Name = "showAll";
+            this.showAll.Size = new System.Drawing.Size(154, 17);
+            this.showAll.TabIndex = 12;
+            this.showAll.Text = "Alle Vertretungen Anzeigen";
+            this.showAll.UseVisualStyleBackColor = true;
+            this.showAll.CheckedChanged += new System.EventHandler(this.ShowAll_CheckedChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(930, 525);
+            this.Controls.Add(this.showAll);
             this.Controls.Add(this.deleteLessons);
             this.Controls.Add(this.ShowLessons);
             this.Controls.Add(this.madeBy);
@@ -185,6 +205,8 @@
         private System.Windows.Forms.Label madeBy;
         private System.Windows.Forms.Button ShowLessons;
         private System.Windows.Forms.Button deleteLessons;
+        private System.Windows.Forms.CheckBox showAll;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 

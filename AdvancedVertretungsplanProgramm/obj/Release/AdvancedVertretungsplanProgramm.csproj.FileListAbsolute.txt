@@ -27,3 +27,4 @@ C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\Advance
 C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\obj\Release\AdvancedVertretungsplanProgramm.csproj.CopyComplete
 C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\obj\Release\AdvancedVertretungsplanProgramm.exe
 C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\obj\Release\AdvancedVertretungsplanProgramm.pdb
+C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\obj\Release\AdvancedVertretungsplanProgramm.csprojAssemblyReference.cache
