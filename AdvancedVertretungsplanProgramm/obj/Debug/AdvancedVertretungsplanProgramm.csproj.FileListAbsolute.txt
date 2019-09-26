@@ -31,10 +31,8 @@ C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\Advance
 C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\bin\Debug\AdvancedVertretungsplanProgramm.exe
 C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\bin\Debug\AdvancedVertretungsplanProgramm.pdb
 C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\bin\Debug\HtmlAgilityPack.dll
-C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\bin\Debug\HtmlAgilityPack.pdb
 C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\bin\Debug\HtmlAgilityPack.xml
-C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\bin\Debug\Newtonsoft.Json.xml
 C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\obj\Debug\AdvancedVertretungsplanProgramm.csprojAssemblyReference.cache
 C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\obj\Debug\AdvancedVertretungsplanProgramm.Form1.resources
 C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\obj\Debug\AdvancedVertretungsplanProgramm.Properties.Resources.resources
@@ -43,3 +41,8 @@ C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\Advance
 C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\obj\Debug\AdvancedVertretungsplanProgramm.csproj.CopyComplete
 C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\obj\Debug\AdvancedVertretungsplanProgramm.exe
 C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\obj\Debug\AdvancedVertretungsplanProgramm.pdb
+C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\bin\Debug\AdvancedVertretungsplanProgramm.exe.manifest
+C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\bin\Debug\AdvancedVertretungsplanProgramm.application
+C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\obj\Debug\AdvancedVertretungsplanProgramm.TrustInfo.xml
+C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\obj\Debug\AdvancedVertretungsplanProgramm.exe.manifest
+C:\Users\Robert\Desktop\Stuff 3.0\Repos\Advanced-Vertretungsplan-Program\AdvancedVertretungsplanProgramm\obj\Debug\AdvancedVertretungsplanProgramm.application

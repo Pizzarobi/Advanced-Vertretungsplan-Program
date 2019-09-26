@@ -11,19 +11,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using HtmlAgilityPack;
-using Newtonsoft.Json;
 
 namespace AdvancedVertretungsplanProgramm
 {
     public partial class Form1 : Form
     {
-        private List<string> Kurse = new List<string>();
+        List<string> Kurse;
         bool vertret;
         bool allLessons = false;
+        bool debugMenu = false;
 
         public Form1()
         {
+            Kurse = new List<string>();
             InitializeComponent();
+            debugLabel.Visible = debugMenu;
+            LoadData();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -39,7 +42,7 @@ namespace AdvancedVertretungsplanProgramm
             //Während geladen wird, soll Warte-cursor gezeigt werden
             Cursor.Current = Cursors.WaitCursor;
 
-            if (AutoLoadLessons() && CheckNet())
+            if (CheckNet())
             {
                 int Rows = 1;
                 vertret = false;
@@ -69,6 +72,18 @@ namespace AdvancedVertretungsplanProgramm
                 try
                 {
                     Header.Text = doc.DocumentNode.SelectSingleNode("//h2[@class='TextUeberschrift']").InnerText;
+
+                    try
+                    {
+                        string lastUpdated = doc.DocumentNode.SelectSingleNode("//th[@class='TextAktuellesDatum']").InnerText;
+
+                        toolTip1.SetToolTip(Header, lastUpdated);
+                        toolTip1.SetToolTip(Mitteilungen, lastUpdated);
+                    }
+                    catch
+                    {
+                        toolTip1.SetToolTip(Header, "Stand kann nicht angezeigt werden");
+                    }
 
                     try
                     {
@@ -157,10 +172,10 @@ namespace AdvancedVertretungsplanProgramm
             {
                 Header.Text = "Error";
                 Mitteilungen.Text = "Bitte überprüfen Sie ihre Internetverbindung.";
-            }else if(!File.Exists(@"Kurse.json"))
+            }else if(Properties.Settings.Default.KurseSpeicher == null)
             {
                 Header.Text = "Error";
-                Mitteilungen.Text = "Fügen Sie bitte Kurse hinzu! Dies wird gemacht indem der Kursname in das Textfeld eingefügt wird, und die Taste Enter oder der Hinzufügen Knopf gedrückt wird.";
+                Mitteilungen.Text = "Fügen Sie bitte Kurse hinzu! Dies wird gemacht indem der Kursname in das Textfeld eingefügt wird, und die Taste Enter bzw. der Hinzufügen Knopf gedrückt wird.";
             }else
             {
                 Header.Text = "Error";
@@ -172,34 +187,31 @@ namespace AdvancedVertretungsplanProgramm
         }
 
         /// <summary>
-        /// Speichert die Kurse in einer JSON Datei ab
+        /// Speichert die Kurse in dem Programmspeicher
         /// </summary>
-        private void SaveDataInJson()
+        private void SaveData()
         {
-            using (StreamWriter file = File.CreateText(@"Kurse.json"))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(file, Kurse);
-            }
+            //Test
+            Properties.Settings.Default.KurseSpeicher = String.Join(":", Kurse);
+            Properties.Settings.Default.Save();
         }
 
         /// <summary>
-        /// Lädt die Kurse aus einer JSON Datei
+        /// Lädt die Kurse aus dem Programmspeicher
         /// </summary>
-        private void LoadJson()
+        private void LoadData()
         {
-            Kurse.Clear();
+            if (Kurse.Count() > 0)
+                Kurse.Clear();
 
-            using (StreamReader reader = new StreamReader("Kurse.json"))
+            try
             {
-                string json = reader.ReadToEnd();
-                dynamic array = JsonConvert.DeserializeObject(json);
+                if(Properties.Settings.Default.KurseSpeicher.Substring(0, 1).Equals(":"))
+                Properties.Settings.Default.KurseSpeicher = Properties.Settings.Default.KurseSpeicher.Remove(0, 1);
+            }catch { }
 
-                foreach(var item in array)
-                {
-                    Kurse.Add(item.ToString());
-                }
-            }
+            debugLabel.Text = Properties.Settings.Default.KurseSpeicher;
+            Kurse = Properties.Settings.Default.KurseSpeicher.Split(':').ToList<string>();
         }
 
         /// <summary>
@@ -229,7 +241,7 @@ namespace AdvancedVertretungsplanProgramm
 
             if (AutoLoadLessons())
             {
-                LoadJson();
+                LoadData();
 
                 for (int i = 0; i < Kurse.Count; i++)
                 {
@@ -299,7 +311,7 @@ namespace AdvancedVertretungsplanProgramm
                 lessonName.ResetText();
             }
 
-            SaveDataInJson();
+            SaveData();
             UpdateLessons();
         }
 
@@ -309,9 +321,9 @@ namespace AdvancedVertretungsplanProgramm
         /// <returns>Gibt einen Boolean ob die Kursliste besteht zurück</returns>
         private bool AutoLoadLessons()
         {
-            if (File.Exists(@"Kurse.json"))
+            LoadData();
+            if(Kurse !=null)
             {
-                LoadJson();
                 return true;
             }
             else
@@ -326,7 +338,7 @@ namespace AdvancedVertretungsplanProgramm
         /// </summary>
         private void MadeBy_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Programmiert von Robert Kalmar http://www.github.com/Pizzarobi mithilfe von Microsoft Visual Studio."+ "\n" + "Und der Benutzung von Newtonsoft.Json und HtmlAgilityPack.\nIcon kreiert von Maxim Kalaschnikow\nEin Changelog befindet sich auf https://robert-k.net/projekte/avp/changelog/ . \n", "Version 1.0");
+            MessageBox.Show("Programmiert von Robert Kalmar http://www.github.com/Pizzarobi mithilfe von Microsoft Visual Studio."+ "\n" + "Und der Benutzung von HtmlAgilityPack.\nIcon kreiert von Maxim Annissimov.\n", "Version 1.1");
         }
 
         /// <summary>
@@ -356,7 +368,7 @@ namespace AdvancedVertretungsplanProgramm
                 {
                     Kurse.RemoveAt(i);
                     lessonName.ResetText();
-                    SaveDataInJson();
+                    SaveData();
                 }
             }
             UpdateLessons();
@@ -423,6 +435,11 @@ namespace AdvancedVertretungsplanProgramm
             if (e.KeyCode == Keys.Delete)
             {
                 DeleteLessons();
+            }
+            else if(e.KeyCode == Keys.F10)
+            {
+                debugLabel.Visible = debugMenu;
+                debugMenu = !debugMenu;
             }
         }
     }
